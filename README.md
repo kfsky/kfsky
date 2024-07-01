@@ -1,5 +1,13 @@
 ### Hi there 👋
 
+![](./kaggle-badges/CompetitionsRank/plastic-black.svg)
+![](./kaggle-plates/Competitions/white.svg)
+
+<!-- HTML -->
+<img src="./kaggle-badges/CompetitionsRank/plastic-black.svg" />
+<img src="./kaggle-plates/Competitions/white.svg" />
+
+
 <!--
 **kfsky/kfsky** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
