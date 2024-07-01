@@ -1,6 +1,7 @@
 ### Hi there 👋
 
-![](./kaggle-plates/Competitions/white.svg)
+![](./kaggle-badges/CompetitionsRank/plastic-black.svg)
+
 
 
 <!--
