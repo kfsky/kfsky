@@ -1,9 +1,11 @@
-### Hi there 👋
+# Hi there 👋
 [![](https://raw.githubusercontent.com/kfsky/kfsky/main/profile-summary-card-output/2077/0-profile-details.svg)](https://github.com/vn7n24fzkq/github-profile-summary-cards)
 [![](https://raw.githubusercontent.com/kfsky/kfsky/main/profile-summary-card-output/2077/1-repos-per-language.svg)](https://github.com/vn7n24fzkq/github-profile-summary-cards) [![](https://raw.githubusercontent.com/kfsky/kfsky/main/profile-summary-card-output/2077/2-most-commit-language.svg)](https://github.com/vn7n24fzkq/github-profile-summary-cards)
 [![](https://raw.githubusercontent.com/kfsky/kfsky/main/profile-summary-card-output/2077/3-stats.svg)](https://github.com/vn7n24fzkq/github-profile-summary-cards) [![](https://raw.githubusercontent.com/kfsky/kfsky/main/profile-summary-card-output/2077/4-productive-time.svg)](https://github.com/vn7n24fzkq/github-profile-summary-cards)
 
-### Kaggle
+[![trophy](https://github-profile-trophy.vercel.app/?username=kfsky)](https://github.com/ryo-ma/github-profile-trophy)
+
+# Kaggle
 
 <div>
   <a href="https://www.kaggle.com/kengofujii">
@@ -40,7 +42,7 @@
 
 <br />
 
-## My Best Skills
+# My Best Skills
 
 <!-- https://github.com/tandpfun/skill-icons#readme -->
 <img src="https://skillicons.dev/icons?i=aws,gcp,github,githubactions,docker,py,pytorch,vscode&theme=light" />
