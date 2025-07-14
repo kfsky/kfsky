@@ -10,7 +10,19 @@ export async function getKaggleuserProfile(
   userName: string
 ): Promise<KaggleProfile> {
   const url = `https://www.kaggle.com/${userName}`;
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ 
+    headless: true,
+    args: process.env.CI ? [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-accelerated-2d-canvas',
+      '--no-first-run',
+      '--no-zygote',
+      '--single-process',
+      '--disable-gpu'
+    ] : []
+  });
   const page: Page = await browser.newPage();
   await page.goto(url, { waitUntil: "networkidle2" });
   await new Promise((resolve) => setTimeout(resolve, 10000));
