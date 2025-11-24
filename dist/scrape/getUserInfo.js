@@ -12,7 +12,19 @@ const xpaths_1 = require("./xpaths");
  */
 async function getKaggleuserProfile(userName) {
     const url = `https://www.kaggle.com/${userName}`;
-    const browser = await puppeteer_1.default.launch({ headless: true });
+    const browser = await puppeteer_1.default.launch({
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--single-process',
+            '--disable-gpu'
+        ]
+    });
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "networkidle2" });
     await new Promise((resolve) => setTimeout(resolve, 10000));
