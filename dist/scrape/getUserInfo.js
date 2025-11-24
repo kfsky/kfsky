@@ -26,8 +26,10 @@ async function getKaggleuserProfile(userName) {
         ]
     });
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle2" });
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    // Set a realistic user agent to avoid bot detection
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+    await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
+    await new Promise((resolve) => setTimeout(resolve, 15000));
     // Initialize the userProfile object
     let userProfile = {};
     for (const key in xpaths_1.xpaths) {
@@ -69,14 +71,23 @@ async function getKaggleuserProfile(userName) {
  * @param xpath - The XPath of the element
  */
 const getTextContentByXpath = async (page, xpath) => {
-    const elementHandle = await page.waitForSelector(`::-p-xpath(${xpath})`);
-    const info = await page.evaluate((element) => {
-        return element ? element.textContent : null;
-    }, elementHandle);
-    if (info == null) {
-        throw new Error(`Text not found for xpath: ${xpath}`);
+    try {
+        const elementHandle = await page.waitForSelector(`::-p-xpath(${xpath})`, {
+            timeout: 60000
+        });
+        const info = await page.evaluate((element) => {
+            return element ? element.textContent : null;
+        }, elementHandle);
+        if (info == null) {
+            throw new Error(`Text not found for xpath: ${xpath}`);
+        }
+        return info;
     }
-    return info;
+    catch (error) {
+        console.error(`Failed to find element with xpath: ${xpath}`);
+        console.error(`Error: ${error}`);
+        throw new Error(`Element not found for xpath: ${xpath}. Error: ${error}`);
+    }
 };
 /**
  Helper function to get medal counts by XPath
