@@ -25,7 +25,7 @@ jobs:
       - name: Run Claude Code Action
         uses: anthropics/claude-code-action@beta
         with:
-          use_agent_mode: true
+          mode: "agent"
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           direct_prompt: |
