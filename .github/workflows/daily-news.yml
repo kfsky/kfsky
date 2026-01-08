@@ -28,7 +28,7 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
-            --allowedTools "WebSearch,Bash(gh issue create*),Bash(git *),Edit,Write,Read"
+            --allowedTools "WebSearch,Bash(gh issue create:*),Bash(git:*),Edit,Write,Read"
             --max-turns 30
           prompt: |
             # Daily Tech News Collection Task
