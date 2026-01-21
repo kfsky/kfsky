@@ -14,7 +14,7 @@ async function getKaggleuserProfile(userName) {
     const url = `https://www.kaggle.com/${userName}`;
     const browser = await puppeteer_1.default.launch({
         headless: true,
-        args: ["--no-sandbox", "--disable-setuid-sandbox"]
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "networkidle2" });
@@ -23,31 +23,66 @@ async function getKaggleuserProfile(userName) {
     let userProfile = {};
     for (const key in xpaths_1.xpaths) {
         const section = xpaths_1.xpaths[key];
+        let category = "";
+        try {
+            category = await getTextContentByXpath(page, section.category);
+        }
+        catch (error) {
+            console.log(`${key}: No category found`);
+            break;
+        }
         const rank = await getTextContentByXpath(page, section.rank);
+        let order = "";
+        let participants = "";
+        try {
+            order = await getTextContentByXpath(page, section.order);
+            participants = await getTextContentByXpath(page, section.participants);
+            participants = participants.replace("of", "");
+            participants = participants.trim();
+        }
+        catch (error) {
+            console.log(`${category}: No order and participants found`);
+        }
         const medalCounts = await getMedalCountsForProfile(page, section.medal_count);
         // Initialize the corresponding section in userProfile if not already initialized
-        if (key === "Competitions") {
+        if (category === "Competitions") {
             userProfile.Competitions = {
                 rank: rank,
                 medal_counts: medalCounts,
+                order: {
+                    order: order,
+                    participants: participants,
+                },
             };
         }
-        else if (key === "Datasets") {
+        else if (category === "Datasets") {
             userProfile.Datasets = {
                 rank: rank,
                 medal_counts: medalCounts,
+                order: {
+                    order: order,
+                    participants: participants,
+                },
             };
         }
-        else if (key === "Notebooks") {
+        else if (category === "Notebooks") {
             userProfile.Notebooks = {
                 rank: rank,
                 medal_counts: medalCounts,
+                order: {
+                    order: order,
+                    participants: participants,
+                },
             };
         }
-        else if (key === "Discussions") {
+        else if (category === "Discussions") {
             userProfile.Discussions = {
                 rank: rank,
                 medal_counts: medalCounts,
+                order: {
+                    order: order,
+                    participants: participants,
+                },
             };
         }
     }
@@ -58,16 +93,21 @@ async function getKaggleuserProfile(userName) {
  * Get the text content of an element by XPath
  * @param page - The Puppeteer page
  * @param xpath - The XPath of the element
+ * @param timeout - The timeout in milliseconds (default is 1000 ms)
  */
-const getTextContentByXpath = async (page, xpath) => {
-    const elementHandle = await page.waitForSelector(`::-p-xpath(${xpath})`);
-    const info = await page.evaluate((element) => {
-        return element ? element.textContent : null;
-    }, elementHandle);
-    if (info == null) {
-        throw new Error(`Text not found for xpath: ${xpath}`);
-    }
-    return info;
+const getTextContentByXpath = async (page, xpath, timeout = 1000) => {
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error(`Timeout exceeded for xpath: ${xpath}`)), timeout));
+    const getTextContentPromise = async () => {
+        const elementHandle = await page.waitForSelector(`::-p-xpath(${xpath})`);
+        const info = await page.evaluate((element) => {
+            return element ? element.textContent : null;
+        }, elementHandle);
+        if (info == null) {
+            throw new Error(`Text not found for xpath: ${xpath}`);
+        }
+        return info;
+    };
+    return Promise.race([getTextContentPromise(), timeoutPromise]);
 };
 /**
  Helper function to get medal counts by XPath

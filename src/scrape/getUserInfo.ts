@@ -1,6 +1,6 @@
 import puppeteer, { Page } from "puppeteer";
 import { xpaths } from "./xpaths";
-import { KaggleProfile, Rank } from "../types";
+import { KaggleProfile, Rank, Xpaths } from "../types";
 
 /**
  * Get the user profile from Kaggle
@@ -12,7 +12,7 @@ export async function getKaggleuserProfile(
   const url = `https://www.kaggle.com/${userName}`;
   const browser = await puppeteer.launch({
     headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page: Page = await browser.newPage();
   await page.goto(url, { waitUntil: "networkidle2" });
@@ -24,32 +24,67 @@ export async function getKaggleuserProfile(
   for (const key in xpaths) {
     const section = xpaths[key as keyof typeof xpaths];
 
+    let category = "";
+    try {
+      category = await getTextContentByXpath(page, section.category);
+    } catch (error) {
+      console.log(`${key}: No category found`);
+      break;
+    }
+
     const rank = await getTextContentByXpath(page, section.rank);
+
+    let order = "";
+    let participants = "";
+    try {
+      order = await getTextContentByXpath(page, section.order);
+      participants = await getTextContentByXpath(page, section.participants);
+      participants = participants.replace("of", "");
+      participants = participants.trim();
+    } catch (error) {
+      console.log(`${category}: No order and participants found`);
+    }
     const medalCounts = await getMedalCountsForProfile(
       page,
       section.medal_count
     );
 
     // Initialize the corresponding section in userProfile if not already initialized
-    if (key === "Competitions") {
+    if (category === "Competitions") {
       userProfile.Competitions = {
         rank: rank as Rank,
         medal_counts: medalCounts,
+        order: {
+          order: order,
+          participants: participants,
+        },
       };
-    } else if (key === "Datasets") {
+    } else if (category === "Datasets") {
       userProfile.Datasets = {
         rank: rank as Rank,
         medal_counts: medalCounts,
+        order: {
+          order: order,
+          participants: participants,
+        },
       };
-    } else if (key === "Notebooks") {
+    } else if (category === "Notebooks") {
       userProfile.Notebooks = {
         rank: rank as Rank,
         medal_counts: medalCounts,
+        order: {
+          order: order,
+          participants: participants,
+        },
       };
-    } else if (key === "Discussions") {
+    } else if (category === "Discussions") {
       userProfile.Discussions = {
         rank: rank as Rank,
         medal_counts: medalCounts,
+        order: {
+          order: order,
+          participants: participants,
+        },
       };
     }
   }
@@ -62,19 +97,32 @@ export async function getKaggleuserProfile(
  * Get the text content of an element by XPath
  * @param page - The Puppeteer page
  * @param xpath - The XPath of the element
+ * @param timeout - The timeout in milliseconds (default is 1000 ms)
  */
 const getTextContentByXpath = async (
   page: Page,
-  xpath: string
+  xpath: string,
+  timeout: number = 1000
 ): Promise<string> => {
-  const elementHandle = await page.waitForSelector(`::-p-xpath(${xpath})`);
-  const info = await page.evaluate((element: Element | null) => {
-    return element ? element.textContent : null;
-  }, elementHandle);
-  if (info == null) {
-    throw new Error(`Text not found for xpath: ${xpath}`);
-  }
-  return info;
+  const timeoutPromise = new Promise<never>((_, reject) =>
+    setTimeout(
+      () => reject(new Error(`Timeout exceeded for xpath: ${xpath}`)),
+      timeout
+    )
+  );
+
+  const getTextContentPromise = async () => {
+    const elementHandle = await page.waitForSelector(`::-p-xpath(${xpath})`);
+    const info = await page.evaluate((element: Element | null) => {
+      return element ? element.textContent : null;
+    }, elementHandle);
+    if (info == null) {
+      throw new Error(`Text not found for xpath: ${xpath}`);
+    }
+    return info;
+  };
+
+  return Promise.race([getTextContentPromise(), timeoutPromise]);
 };
 
 /**
