@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-03-24",
+  "lastUpdated": "2026-03-25",
   "articles": [
     "https://venturebeat.com/orchestration/anthropic-just-shipped-an-openclaw-killer-called-claude-code-channels",
     "https://www.cnbc.com/2026/03/17/openai-preps-for-ipo-in-2026-says-chatgpt-must-be-productivity-tool.html",
@@ -610,6 +610,13 @@
     "https://qz.com/anthropic-claude-ai-business-revenue-pentagon-openai-chatgpt",
     "https://9to5mac.com/2026/03/23/anthropic-is-giving-claude-the-ability-to-use-your-mac-for-you/",
     "https://www.cnbc.com/2026/03/21/openclaw-chatgpt-moment-sparks-concern-ai-models-becoming-commodities.html",
-    "https://help.openai.com/en/articles/11391654-chatgpt-business-release-notes"
+    "https://help.openai.com/en/articles/11391654-chatgpt-business-release-notes",
+    "https://linear.app/changelog/2026-03-24-introducing-linear-agent",
+    "https://www.cnbc.com/2026/03/24/anthropic-claude-ai-agent-use-computer-finish-tasks.html",
+    "https://techcrunch.com/2026/03/24/anthropic-hands-claude-code-more-control-but-keeps-it-on-a-leash/",
+    "https://www.cnbc.com/2026/03/24/anthropic-lawsuit-pentagon-supply-chain-risk-claude.html",
+    "https://www.macrumors.com/2026/03/24/claude-use-mac-remotely-iphone/",
+    "https://9to5mac.com/2026/03/24/claude-code-gives-developers-auto-mode-a-safer-alternative-to-skipping-permissions/",
+    "https://siliconangle.com/2026/03/23/anthropics-claude-gets-computer-use-capabilities-preview/"
   ]
 }
